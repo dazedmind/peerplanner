@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;400;500;700&display=swap');
+
+:root {
+    --purp : #AE65C8;
+    --blue : #1BAEDC;
+    --base-gray : #1F1F1F;
+    --base-black : #131313;
+    --base-neutral : #1F1F1F;
+    --base-input : #2c2c2c;
+    --smoke : #909090;
+    --white : #DADADA;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Kumbh Sans', sans-serif;
+    background-color: var(--base-black);
+}
+
+header {
+    background-color: var(--base-gray);
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 4rem;
+    color: var(--blue);
+    align-items: center;
+}
+
+.header-box {
+    display: flex;
+    align-items: center;
+}
+
+.header-box h1 {
+    color: #1BAEDC;
+}
+
+.header-img {
+    width: 4rem;
+}
+/* LOG IN CARD */
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 6rem;
+}
+
+.create-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 4rem;
+}
+
+h1 {
+    color: var(--white);
+    font-size: 40px;
+}
+
+a {
+   text-decoration: none;
+}
+
+
+.container {
+    background-color: var(--base-gray);
+    padding: 2rem;
+    border-radius: 12px;
+}
+
+.login-form {
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: var(--smoke);
+}
+
+.registration-form {
+	font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: var(--smoke);
+}
+
+input {
+    background-color: var(--base-input);
+    border: none;
+    padding: .6rem .8rem;
+    border-radius: 7px;
+    color: white;
+    width: 15vw;
+    outline: none;
+}
+
+.btn-container {
+    text-align: center;
+}
+
+button {
+	background-color: #1BAEDC;
+    font-weight: bold;
+    font-size: 18px;
+    color: black;
+    padding: .4rem .8rem;
+    width: auto;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    border-radius: 7px;
+}
+
+.swal2-popup .swal2-actions {
+	text-align: center;
+}
+
+#login-btn {
+    background-color: #1BAEDC;
+    font-weight: bold;
+    font-size: 18px;
+    color: black;
+    padding: .4rem .8rem;
+    width: auto;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+#register-btn {
+    background-color: #1BAEDC;
+    font-weight: bold;
+    font-size: 18px;
+    color: black;
+    padding: .4rem .8rem;
+    width: auto;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+p {
+    color: #606060;
+    font-size: 14px;
+}
+
+
+/* ERROR PAGE STYLE */
+.centered-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10rem;
+}
+
+.ext-link a{
+    color: var(--blue);
+    text-decoration: none;
+}
+
+@media screen and (max-width: 600px) {
+    .header-box img {
+        width: 1rem;
+    }
+
+    .header-box h1 {
+        font-size: 2rem;
+    }
+
+    .container {
+        width: 80vw;
+        margin: 0rem 2rem;
+    }
+
+    input {
+        width: auto;
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 960px) {
+
+    .container {
+        width: 40vw;
+        margin: 0rem 2rem;
+    }
+
+    input {
+        width: auto;
+    }
+}
+
+@media screen and (min-width: 960px) and (max-width: 1280px) {
+    
+    .container {
+        width: 35vw;
+        margin: 0rem 2rem;
+    }
+
+    input {
+        width: auto;
+    }
+}

@@ -1,0 +1,369 @@
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;400;500;700&display=swap');
+
+:root {
+    --purp : #AE65C8;
+    --blue : #1BAEDC;
+    --base-gray : #1F1F1F;
+    --base-black : #131313;
+    --base-neutral : #1F1F1F;
+    --base-input : #2c2c2c;
+    --smoke : #909090;
+    --white : #DADADA;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+nav {
+    display: flex;
+    align-items: center;
+    margin-right: 2rem;
+}
+
+.nav-links {
+    font-weight: bold;
+    list-style-type: none;    
+    display: flex;
+    font-size: 18px;
+    margin-right: 2rem;
+}
+
+.link {
+    text-decoration: none;
+    color: var(--smoke);
+    padding: 1rem;
+    border-radius: 7px;
+    margin: 0rem .2rem;
+}
+
+.link:hover {
+    color: var(--blue);
+    background-color: var(--base-input);
+}
+
+#profile-menu img {
+    background-color: var(--white);
+    border-radius: 50%;
+    border: solid;
+    border-color: var(--white);
+    cursor: pointer;
+}
+
+a {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+}
+
+#current__page {
+    padding: 1rem;
+    border-radius: 7px;
+	color: var(--blue);
+    background-color: var(--base-input);
+}
+
+/*  MAIN BUTTONS */
+
+.main-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 8rem;
+    text-align: center;
+}
+
+.main-text {
+    font-size: 2.5rem;
+}
+
+.main-btn {
+    padding: .8rem 1.2rem;
+    border-radius: 7px;
+    background-color: var(--blue);
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: .3s ease all;
+    margin: 1rem 1rem 1rem 0rem;
+}
+
+.main-btn:hover {
+    background-color: #16c3f8;
+    box-shadow: 0px 0px 54px -12px #16c3f8;
+}
+
+.secondary-btn {
+    padding: .8rem 1.2rem;
+    border-radius: 7px;
+    background-color: var(--smoke);
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: .3s ease all;
+    margin: 1rem 1rem 1rem 0rem;    
+}
+
+.secondary-btn:hover {
+    background-color: var(--smoke);
+    box-shadow: 0px 0px 54px -12px #909090;
+}
+
+.main-btn-container {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+}
+
+.wrapper {
+    display: flex;
+    align-items:center;
+  	flex-direction: row-reverse;
+    justify-content: space-between;
+    width: 80vw;
+	margin-top: 4rem;
+}
+
+.main-content {
+	text-align: start;
+}
+
+/* ACCOUNT MENU */
+#hidden-menu {
+    background-color: var(--base-input);
+    position: absolute;
+    padding: 1rem;
+    right: 0;
+    margin-right: 3rem;
+    border-radius: 7px;
+    display: none;
+}
+
+.nav-links-hidden {
+    font-weight: bold;
+    list-style-type: none;    
+    gap: 2rem;
+    font-size: 18px;
+    margin-right: 2rem;
+    z-index: 10;
+}
+
+.hidden-link {
+    text-decoration: none;
+    color: var(--white);
+    padding: .8rem 1rem;
+    border-radius: 7px;
+}
+
+.hidden-link:hover {
+    background-color: #1F1F1F;
+}
+
+/* PLOTS HTML */
+#calendar {
+    width: 80%;
+    margin: 5rem 6rem;
+}
+
+.calendar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* SEND PLOT STYLE */
+.main-send-plot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 2rem 0rem;
+    gap: 1rem;
+}
+
+.send-btn-container {
+    text-align: center;
+}
+
+#send-btn {
+    background-color: var(--blue);
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 7px;
+    padding: .6rem 1rem;
+    margin-top: 1rem;
+}
+
+.form-container {
+    display: flex;
+    background-color: var(--base-gray);
+    padding: 2rem;
+    border-radius: 12px;
+    color: var(--smoke);
+}
+
+.plot-request {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    width: 30vw;
+}
+
+textarea {
+    font-family: inherit;
+    background-color: var(--base-input);
+    outline: none;
+    border-radius:7px;
+    border: none;
+    padding: .8rem;
+    color: white;
+}
+
+select {
+    background-color: var(--base-input);
+    padding: .6rem;
+    outline: none;
+    border: none;
+    border-radius: 7px;
+    color: white;
+}
+
+.checkbox-container {
+    
+    display: flex;
+    justify-content: start;
+    gap: 0;
+}
+
+/* PEER LIST */
+
+.peerlist-container {
+    margin-top: 4rem;
+}
+
+.peerlist-card-container {
+	background-color: var(--base-gray);
+	width: 30vw;
+	padding: 1rem;
+	margin-top: 4rem;
+	border-radius: 7px;
+	
+	display: flex;
+	align-items:center;
+}
+
+.peer-result {
+	color: white;
+	border: none;
+}
+
+td {
+	padding: 1rem;
+	margin: 0rem 1rem;
+}
+
+.empty-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+
+.search-peers {
+    width: 100%;
+}
+
+.search-container {
+    display: flex;
+    gap: 1rem;
+}
+
+#search-btn {
+    background-color: var(--blue);
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* ACCOUNT SETTINGS */
+.main-acc-settings {
+    display: flex;
+    justify-content: center;
+    margin-top: 5rem;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info {
+    background-color: var(--base-input);
+    margin: 1rem;
+    padding: 1rem;
+    color: white;
+    border-radius: 12px;
+}
+
+.info-span {
+    gap: .5rem;
+    display: flex;
+}
+
+.acc-options {
+    margin-top: 2rem;
+    color: var(--blue);
+}
+
+#change-pass-btn, #delete-acc-btn {
+    color: var(--blue);
+}
+
+/* VIEW PLOT REQUEST */
+
+.main-plot-request {
+    color: white;
+}
+
+.card {
+    padding: 1rem;
+    background-color: var(--base-gray);
+    margin: 4rem 10rem;
+    border-radius: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+th {
+    border: solid beige 1px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    padding: 0.5rem;
+}
+
+td {
+    padding: 1rem;
+}
+
+#accept-btn, #decline-btn {
+    padding: 0.6rem 1rem;
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#accept-btn {
+    background-color: rgb(89, 243, 153);
+}
+
+#decline-btn {
+    background-color: rgb(220, 108, 108);
+}
