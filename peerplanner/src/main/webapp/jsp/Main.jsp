@@ -46,6 +46,12 @@
                         <li>
                             <a class="hidden-link" href="AccSettings.jsp">Account Settings</a>
                         </li>
+                          <li>
+                            <a class="hidden-link" href="Notification.jsp">Notifications</a>
+                        </li>
+                        <li>
+                            <a class="hidden-link" href="PeerRequest.jsp">Peer Requests</a>
+                        </li>
                         <li>
                             <a class="hidden-link" href="../login.jsp">Log Out</a>
                         </li>

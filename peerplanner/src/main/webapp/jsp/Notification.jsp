@@ -1,9 +1,3 @@
-<%@page import="java.sql.DriverManager" %>
-<%@page import="java.sql.Connection" %>
-<%@page import="java.sql.Statement" %>
-<%@page import="java.sql.PreparedStatement" %>
-<%@page import="java.sql.ResultSet" %>
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -16,9 +10,7 @@
     <link rel="stylesheet" href="../css/main.css">
     <link rel="shortcut icon" href="../images/peerplanner.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../css/evo-calendar.midnight-blue.min.css">
-    <link rel="stylesheet" href="../css/evo-calendar.min.css">
-    <title>PeerPlanner - Plots</title>
+    <title>PeerPlanner</title>
 </head>
 <body>
     <header>
@@ -55,7 +47,7 @@
                         </li>
                         <li>
                             <a class="hidden-link" href="PeerRequest.jsp">Peer Requests</a>
-                        </li>                        
+                        </li>
                         <li>
                             <a class="hidden-link" href="../login.jsp">Log Out</a>
                         </li>
@@ -64,57 +56,32 @@
             </span>
         </nav>
     </header>
-    
-    <div class="main-plot">
-    		<div class="plot-card">
-    		    <h1>Plots</h1>
-				<table border="1">	
-					<tr>
-						<th>Event Name</th>
-						<th>Message</th>
-						<th>Event Date</th>
-						<th>Time</th>						
-						<th>Delete</th>
-					</tr>
-				<%
-					int currentID = (int) session.getAttribute("user_id");
-					try{
-						Class.forName("com.mysql.jdbc.Driver");
-						Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/peerplan","root","");
-						Statement st = con.createStatement();
-						
-						String str = "select * from plans where for_userid='"+currentID+"'";
-						ResultSet rs = st.executeQuery(str);
-						
-						while(rs.next()){
-						%>
-						<tr>
-							<td><%=rs.getString("eventname")%></td>
-							<td><%=rs.getString("message")%></td>
-							<td><%=rs.getString("event_date")%></td>
-							<td><%=rs.getString("time")%></td>
-							<td>
-								<form method="POST" action="">
-									<input type="hidden" name="planid" value="<%= request.getAttribute("eventid") %>">
-								
-									<button id="decline-btn" data-decline="<%=rs.getInt("plan_id") %>">Delete</button>								
-								</form>
-							</td>
-						</tr>
-				<%
-						}
-					}
-					catch (Exception e){
-						
-					}
-				
-				%>
-				</table>
-			</div>
-	</div>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    <div class="peer-req-main">
+        <h1 class="page-heading">Notifications</h1>
+
+        <div class="peer-req-card">
+            <table class="pr-table" border="1">
+                <tr>
+                	<th>Time</th>
+                    <th width="60%">Notification</td>
+                    <th>Delete</td>
+                </tr>
+                <tr>
+                    <td>Allen</td>
+                    <td>0920</td>
+                    <td>
+                        <form method="POST" action="">
+                            <input type="hidden" name="planid">
+                        
+                            <button id="decline-btn">Delete</button>								
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
     <script src="../scripts/script.js"></script>
-    <script src="../scripts/evo-calendar.min.js"></script>
-    <script src="../scripts/calendar-script.js"></script>
 </body>
 </html>

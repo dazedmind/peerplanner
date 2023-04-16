@@ -177,6 +177,21 @@ a {
     justify-content: center;
 }
 
+.main-plot {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.plot-card {
+	background-color: var(--base-gray);
+	padding: 1rem;
+	border-radius: 7px;
+	margin-top: 4rem;
+	width: auto;
+	color: white;
+}
+
 /* SEND PLOT STYLE */
 .main-send-plot {
     display: flex;
@@ -258,6 +273,16 @@ select {
 	
 	display: flex;
 	align-items:center;
+	justify-content: space-between;
+}
+
+.peer-list-container {
+	background-color: var(--base-gray);
+	padding: 1rem;
+	width: auto;
+	border-radius: 7px;
+	margin-top: 4rem;
+	
 }
 
 .peer-result {
@@ -291,6 +316,14 @@ td {
     color: black;
     font-weight: bold;
     cursor: pointer;
+}
+
+#addpeer-btn {
+	width: auto;
+	background-color: var(--blue);
+	color: black;
+	font-weight: bold;
+	cursor: pointer;
 }
 
 /* ACCOUNT SETTINGS */
@@ -353,11 +386,15 @@ td {
     padding: 1rem;
 }
 
-#accept-btn, #decline-btn {
+#accept-btn, #decline-btn, #plot-btn, #default-btn {
     padding: 0.6rem 1rem;
     border-radius: 7px;
     font-weight: bold;
     cursor: pointer;
+}
+
+#plot-btn, #default-btn {
+	font-size: 16px;
 }
 
 #accept-btn {
@@ -366,4 +403,37 @@ td {
 
 #decline-btn {
     background-color: rgb(220, 108, 108);
+}
+
+#plot-btn {
+	background-color: var(--blue);
+}
+
+#default-btn {
+	background-color: var(--smoke);
+}
+
+
+/* NOTIFICATION PAGE STYLE */
+
+.notif-main {
+    color: white;
+
+}
+
+
+/* PEER REQUEST STYLE */
+
+.peer-req-main {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-top: 4rem;
+}
+
+.pr-table {
+    padding: 1rem;
+    width: 60vw;
 }

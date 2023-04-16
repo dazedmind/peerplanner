@@ -21,7 +21,8 @@ public class SavePlotServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		
+		int requestId = Integer.parseInt(request.getParameter("req_id"));
 		String ename = request.getParameter("eventname");
 		String emessage = request.getParameter("description");
 		String edate = request.getParameter("date");
@@ -32,12 +33,13 @@ public class SavePlotServlet extends HttpServlet {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			 con = DriverManager.getConnection("jdbc:mysql://localhost:3306/peerplan","root", "");
-			String q = "INSERT INTO plans(eventname,message,event_date,time) VALUES(?,?,?,?)";
+			String q = "INSERT INTO planrequest(eventname,message,event_date,time,for_userid) VALUES(?,?,?,?,?)";
 			PreparedStatement st = con.prepareStatement(q);
 			st.setString(1, ename);
 			st.setString(2, emessage);
 			st.setString(3, edate);
 			st.setString(4, etime);
+			st.setInt(5, requestId);
 
 			
 			int rowCount = st.executeUpdate();

@@ -16,9 +16,7 @@
     <link rel="stylesheet" href="../css/main.css">
     <link rel="shortcut icon" href="../images/peerplanner.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../css/evo-calendar.midnight-blue.min.css">
-    <link rel="stylesheet" href="../css/evo-calendar.min.css">
-    <title>PeerPlanner - Plots</title>
+    <title>PeerPlanner</title>
 </head>
 <body>
     <header>
@@ -34,7 +32,7 @@
                     <a class="link" href="Main.jsp"><i class="fa-solid fa-house"></i>Home</a>
                 </li>
                 <li>
-                    <a class="link" id="current__page" href="Plots.jsp"><i class="fa-solid fa-calendar"></i>Plots</a>
+                    <a class="link" href="Plots.jsp"><i class="fa-solid fa-calendar"></i>Plots</a>
                 </li>
                 <li>
                     <a class="link" href="PeerList.jsp"><i class="fa-solid fa-user-group"></i>Peers</a>
@@ -55,7 +53,7 @@
                         </li>
                         <li>
                             <a class="hidden-link" href="PeerRequest.jsp">Peer Requests</a>
-                        </li>                        
+                        </li>
                         <li>
                             <a class="hidden-link" href="../login.jsp">Log Out</a>
                         </li>
@@ -64,57 +62,66 @@
             </span>
         </nav>
     </header>
-    
-    <div class="main-plot">
-    		<div class="plot-card">
-    		    <h1>Plots</h1>
-				<table border="1">	
-					<tr>
-						<th>Event Name</th>
-						<th>Message</th>
-						<th>Event Date</th>
-						<th>Time</th>						
-						<th>Delete</th>
-					</tr>
-				<%
+
+    <div class="peer-req-main">
+        <h1 class="page-heading">Peer Requests</h1>
+
+        <div class="peer-req-card">
+            <table class="pr-table" border="1">
+                <tr>
+                    <th width="60%">From</td>
+                    <th width="20%">Time</td>
+                    <th>Accept</td>
+                    <th>Decline</td>
+                </tr>
+                <%
 					int currentID = (int) session.getAttribute("user_id");
 					try{
 						Class.forName("com.mysql.jdbc.Driver");
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/peerplan","root","");
 						Statement st = con.createStatement();
-						
-						String str = "select * from plans where for_userid='"+currentID+"'";
-						ResultSet rs = st.executeQuery(str);
+						String str = "select * from friends WHERE status='0' and to_id='"+currentID+"'";
+				        String join = "SELECT friends.*, userlist.name FROM friends JOIN userlist ON friends.from_id = userlist.id WHERE friends.status='0' AND friends.to_id='" + currentID + "'";
+
+						ResultSet rs = st.executeQuery(join);						
 						
 						while(rs.next()){
+							int fromID = rs.getInt("from_id");
+
+							request.setAttribute("fromID", fromID);
+
 						%>
-						<tr>
-							<td><%=rs.getString("eventname")%></td>
-							<td><%=rs.getString("message")%></td>
-							<td><%=rs.getString("event_date")%></td>
-							<td><%=rs.getString("time")%></td>
-							<td>
-								<form method="POST" action="">
-									<input type="hidden" name="planid" value="<%= request.getAttribute("eventid") %>">
-								
-									<button id="decline-btn" data-decline="<%=rs.getInt("plan_id") %>">Delete</button>								
-								</form>
-							</td>
-						</tr>
-				<%
+                <tr>
+                    <td><%= rs.getString("name") %></td>
+                    <td><%= rs.getString("created") %></td>
+                    <td>
+                        <form method="POST" action="../acceptpeer">
+                            <input type="hidden" name="fromid" value="<%= request.getAttribute("fromID") %>">
+                        
+                            <button id="accept-btn">Accept</button>								
+                        </form>
+                    </td>
+                    <td>
+                        <form method="POST" action="">
+                            <input type="hidden" name="planid">
+                        
+                            <button id="decline-btn">Decline</button>								
+                        </form>
+                    </td>
+                </tr>
+            <%		
 						}
 					}
 					catch (Exception e){
 						
 					}
 				
-				%>
-				</table>
-			</div>
-	</div>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+				%>    
+            </table>
+
+        </div>
+    </div>
+
     <script src="../scripts/script.js"></script>
-    <script src="../scripts/evo-calendar.min.js"></script>
-    <script src="../scripts/calendar-script.js"></script>
 </body>
 </html>

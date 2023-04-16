@@ -49,7 +49,13 @@
                             <a class="hidden-link" href="AccSettings.jsp">Account Settings</a>
                         </li>
                         <li>
-                            <a class="hidden-link" href="../login.php">Log Out</a>
+                            <a class="hidden-link" href="Notification.jsp">Notifications</a>
+                        </li>
+                        <li>
+                            <a class="hidden-link" href="PeerRequest.jsp">Peer Requests</a>
+                        </li>
+                        <li>
+                            <a class="hidden-link" href="../login.jsp">Log Out</a>
                         </li>
                     </ul>
                 </div>
@@ -60,12 +66,16 @@
 	<div class="main-plot-request">
         <div class="card">
             <table style="width: 80%;">
-                <tr>
-                    <th>Event Name</th>
-                    <th style="width: 40%;">Description</th>
-                    <th style="width: 20%;">Date</th>
-                    <th>Time</th>
-                </tr>
+            	<thead>
+	                <tr>
+	                    <th>Event Name</th>
+	                    <th style="width: 40%;">Description</th>
+	                    <th style="width: 20%;">Date</th>
+	                    <th>Time</th>
+	                    <th>Accept</th>
+	                    <th>Decline</th>
+	                </tr>
+                </thead>
              <%
 					int currentID = (int) session.getAttribute("user_id");
 					try{
@@ -73,16 +83,47 @@
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/peerplan","root","");
 						Statement st = con.createStatement();
 						
-						String str = "select * from plans";
+						String str = "select * from planrequest WHERE status='0' and for_userid='"+currentID+"'";
 						ResultSet rs = st.executeQuery(str);
 						
 						while(rs.next()){
+							String event_name = rs.getString("eventname");
+							String event_desc = rs.getString("message");
+							String event_date = rs.getString("event_date");
+							String event_time = rs.getString("time");
+							int event_id = rs.getInt("plan_id");
+
+							request.setAttribute("eventname", event_name);
+							request.setAttribute("eventdesc", event_desc);
+							request.setAttribute("eventdate", event_date);
+							request.setAttribute("eventtime", event_time);
+							request.setAttribute("eventid", event_id);
+
 						%>
-						<tr>
-							<td><%=rs.getString("eventname")%></td>
-							<td><%=rs.getString("message")%></td>
-							<td><%=rs.getString("event_date")%></td>
-							<td><%=rs.getString("time")%></td>
+						<tr data-row="<%=rs.getInt("plan_id")%>">
+							<td id="eventname"><%=rs.getString("eventname")%></td>
+							<td id="message"><%=rs.getString("message")%></td>
+							<td id="date"><%=rs.getString("event_date")%></td>
+							<td id="time"><%=rs.getString("time")%></td>
+							<td>
+								<form method="POST" action="../acceptplot">
+									<input type="hidden" name="eventname" value="<%= request.getAttribute("eventname") %>">
+									<input type="hidden" name="message" value="<%= request.getAttribute("eventdesc") %>">
+									<input type="hidden" name="date" value="<%= request.getAttribute("eventdate") %>">
+									<input type="hidden" name="time" value="<%= request.getAttribute("eventtime") %>">
+									<input type="hidden" name="planid" value="<%= request.getAttribute("eventid") %>">
+									
+									
+									<button id="accept-btn" data-button="<%=rs.getInt("plan_id") %>">Accept</button>
+								</form>          
+							</td>
+							<td>
+								<form method="POST" action="../decline">
+									<input type="hidden" name="planid" value="<%= request.getAttribute("eventid") %>">
+								
+									<button id="decline-btn" data-decline="<%=rs.getInt("plan_id") %>">Decline</button>								
+								</form>
+							</td>
 						</tr>
 
 				<%		
@@ -93,20 +134,34 @@
 					}
 				
 				%>
-                <tr>
-                    <td>Liam's Birthday Party</td>
-                    <td>Hi there, I am inviting you to a birthday party. It would be nice if you will be here. Hoping to see you! Lovelots</td>
-                    <td>April 10, 2023</td>
-                    <td>1:00 PM</td>
-                </tr>
             </table>
-            <div class="response-btn">
-                <button id="accept-btn">Accept</button>
-                <button id="decline-btn">Decline</button>
-            </div>
         </div>
     </div>
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.11.0/sweetalert2.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.11.0/sweetalert2.all.min.js"></script>
+	
+    <script type="text/javascript">
+    	const declineBtn = document.querySelectorAll('[data-decline]')
 
-    <script src="../scripts/script.js"></script>
+    	declineBtn.forEach((e)=> {
+		e.addEventListener('click', async () => {
+				const {value: text} = await swal({
+					input: 'textarea',
+					title: 'Message',
+					inputPlaceholder: 'Tell them why...',
+					inputAttributes: {
+						'aria-label': 'type your message'
+					},
+					showCancelButton: true
+				})
+				if (text){
+					swal('Sent', '', 'success');
+				}
+			})
+		})
+    </script>
+    <script type="module" src="../scripts/script.js"></script>
+    <script src="../scripts/plotresponse.js"></script>
 </body>
 </html>

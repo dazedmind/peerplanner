@@ -3,6 +3,7 @@
 <%@page import="java.sql.Statement" %>
 <%@page import="java.sql.PreparedStatement" %>
 <%@page import="java.sql.ResultSet" %>
+<%@page import="java.io.*" %>
 
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -50,6 +51,12 @@
                             <a class="hidden-link" href="AccSettings.jsp">Account Settings</a>
                         </li>
                         <li>
+                            <a class="hidden-link" href="Notification.jsp">Notifications</a>
+                        </li>
+                        <li>
+                            <a class="hidden-link" href="PeerRequest.jsp">Peer Requests</a>
+                        </li>
+                        <li>
                             <a class="hidden-link" href="../login.jsp">Log Out</a>
                         </li>
                     </ul>
@@ -66,7 +73,7 @@
                 <input id="search-btn" type="submit" value="Search">
             </form>
 			
-			<div class="peerlist-card-container">
+			<div class="peerlist-card-container" id="peer-card-container">
 				<%
 					String idParam = request.getParameter("id");
 					if(idParam != null && !idParam.isEmpty()) {
@@ -76,27 +83,28 @@
 						PreparedStatement pstmt = con.prepareStatement("SELECT * FROM userlist WHERE id=?");
 						pstmt.setInt(1, id);
 						ResultSet rs = pstmt.executeQuery();
-			
+							
 						if(rs.next()) {
 							String name = rs.getString("name");
 							String email = rs.getString("email");
-							int userId = rs.getInt("id");
+							int friend_id = rs.getInt("id");
+							request.setAttribute("friendId", friend_id);
 				%>
-					<table class="peer-result">
+					<table id="peer-search-result" class="peer-result">
 						<tr>
 							<th>ID</th>
 							<th>Name</th>
 							<th>Email</th>
 						</tr>
 						<tr>
-							<td id="userid"><%=id%></td>
+							<td id="userid"><%=id %></td>
 							<td><%=name%></td>
 							<td><%=email%></td>
 						</tr>
 					</table>
 				<%	
 						} else {
-							out.println("User with ID " + id + " not found.");
+							out.println("User with ID " + id + " not found. ");
 						}
 						rs.close();
 						pstmt.close();
@@ -106,17 +114,23 @@
 					}
 				%>
 						<div>
-							<form method="POST" action="../addpeer">
-								<input type="hidden" name="id" value="">
-								<input type="submit" value="Add User">
+							<form action="../addpeer" method="POST">
+								<input type="hidden" name="idvalue" value="<%=request.getAttribute("friendId") %>">
+								<span class="span-button">
+									<input id="addpeer-btn" type="submit" value="Add User">
+								</span>
 							</form>
 						</div>
 			</div>
 			
 			<div class="peer-list-container">
-				<table border="1">	
+				<h1>Peer List</h1>
+				<table class="peer-result">	
 					<tr>
-						<th>Peers</th>
+						<th>ID</th>
+						<th>Name</th>
+						<th></th>
+						<th></th>
 					</tr>
 				<%
 					int currentID = (int) session.getAttribute("user_id");
@@ -125,37 +139,55 @@
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/peerplan","root","");
 						Statement st = con.createStatement();
 						
-						String str = "select * from userlist where id='"+currentID+"'";
-						ResultSet rs = st.executeQuery(str);
+						String str1 = "select * from friends where to_id='"+currentID+"' and status='1' ";
+						ResultSet rs1 = st.executeQuery(str1);
 						
-						while(rs.next()){
+						while(rs1.next()){
+							int fromID = rs1.getInt("from_id");
+		
+							String str2 = "SELECT * FROM friends WHERE from_id=? AND to_id=? AND status='1'";
+							PreparedStatement ps = con.prepareStatement(str2);
+							ps.setInt(1, fromID);
+							ps.setInt(2, currentID);
+							ResultSet rs2 = ps.executeQuery();
+							if(rs2.next()){
+								int friendID = rs2.getInt("from_id");
+				                String str3 = "SELECT name FROM userlist WHERE id=?";
+				                PreparedStatement ps2 = con.prepareStatement(str3);
+				                ps2.setInt(1, friendID);
+				                ResultSet rs3 = ps2.executeQuery();
+				                if(rs3.next()) {			
 						%>
 						<tr>
-							<td><%=rs.getInt("friends")%></td>
-							
+							<td><%=rs2.getInt("from_id")%></td>
+							<td><%=rs3.getString("name")%></td>
+							<td>
+		                        <button id="plot-btn">Send Plot</button>								
+
+							</td>
+							<td>
+								<form method="POST" action="">
+		                            <input type="hidden" name="planid">
+		                        
+		                            <button id="default-btn">Unpeer</button>								
+		                        </form>
+							</td>
 						</tr>
 				<%
+				                }
+							}
 						}
 					}
 					catch (Exception e){
 						
 					}
 				
+				
 				%>
 				</table>
 			</div>
         </div>
     </div>
-	
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.11.0/sweetalert2.css" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.11.0/sweetalert2.all.min.js"></script>
-	
-    <script type="text/javascript">
-    	var status = document.getElementById("status").value;
-    	if (status == "success") {
-    		swal("Request Sent!", "Peer Request Sent!", "success");
-    	}
-    </script>
     <script src="../scripts/script.js"></script>
 </body>
 </html>

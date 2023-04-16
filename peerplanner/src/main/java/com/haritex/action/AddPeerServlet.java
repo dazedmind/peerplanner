@@ -14,39 +14,33 @@ public class AddPeerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    HttpSession session = request.getSession();
+	    // get session attributes
+		HttpSession session = request.getSession();
 	    
 	    int userId = (int) session.getAttribute("user_id");
-	    String friendIdParam = request.getParameter("userid");
+	    int friendId = Integer.parseInt(request.getParameter("idvalue"));
 	    
-	    if (friendIdParam != null && !friendIdParam.isEmpty()) {
-	        int friendId = Integer.parseInt(friendIdParam);
-			RequestDispatcher dispatcher = null;
-
 	        try {
 	            Class.forName("com.mysql.jdbc.Driver");
 	            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/peerplan","root","");
-	            PreparedStatement pstmt = con.prepareStatement("UPDATE userlist SET friends= ? WHERE id=?");
-	            pstmt.setInt(1, friendId);
-	            pstmt.setInt(2, userId);
-	            pstmt.executeUpdate();
-	            
-	            int rowCount = pstmt.executeUpdate();
-				dispatcher = request.getRequestDispatcher("PeerList.jsp");
+	            PreparedStatement pstmt = con.prepareStatement("INSERT INTO FRIENDS(from_id, to_id) VALUES(?,?)");
+	            pstmt.setInt(1, userId);
+	            pstmt.setInt(2, friendId);
+				
+				int rowCount = pstmt.executeUpdate();
 				if (rowCount > 0) {
+			        response.sendRedirect("jsp/PeerList.jsp");
+
 					request.setAttribute("status", "success");
 				} else {
 					request.setAttribute("status", "failed");
 					
 				}
-				dispatcher.forward(request, response);
 	            pstmt.close();
 	            con.close();
-	        } catch(Exception e) {
-	            e.printStackTrace();
+	        } catch(ClassNotFoundException | SQLException e) {
+		        throw new ServletException("Plot Request Failed", e);
 	        }
-	    }
-	    response.sendRedirect("jsp/PeerList.jsp");
 	}
 
 }

@@ -1,3 +1,9 @@
+<%@page import="java.sql.DriverManager" %>
+<%@page import="java.sql.Connection" %>
+<%@page import="java.sql.Statement" %>
+<%@page import="java.sql.PreparedStatement" %>
+<%@page import="java.sql.ResultSet" %>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -46,6 +52,12 @@
                             <a class="hidden-link" href="jsp/AccSettings.jsp">Account Settings</a>
                         </li>
                         <li>
+                            <a class="hidden-link" href="jsp/Notifications.jsp">Notifications</a>
+                        </li>
+                        <li>
+                            <a class="hidden-link" href="jsp/PeerRequest.jsp">Peer Requests</a>
+                        </li>
+                        <li>
                             <a class="hidden-link" href="	index.jsp">Log Out</a>
                         </li>
                     </ul>
@@ -61,10 +73,29 @@
 
                 <label for="user">Select Peer</label>
                 <select name="users" id="userlist">
-                    <option value="1">User 1</option>
-                    <option value="2">User 2</option>
+                    <%
+                    	try {
+                    		Class.forName("com.mysql.jdbc.Driver");
+                    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/peerplan", "root", "");
+                    		Statement st = con.createStatement();
+                    		String q = "SELECT * FROM userlist";
+                    		
+                    		ResultSet rs = st.executeQuery(q);
+                    		while(rs.next()){
+                    			request.setAttribute("request_id", rs.getInt("id"));
+                    			%>
+                    			<option><%= rs.getString("name") %></option>
+                    			<% 
+                    		}
+                    	} catch (Exception e) {
+                    		
+                    	}
+                    %>
                 </select>
-
+				
+				<label for="req_id">Enter user ID</label>
+                <input name="req_id" type="text">
+				
                 <label for="eventname">Event Name</label>
                 <input name="eventname" type="text">
 
