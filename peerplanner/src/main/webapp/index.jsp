@@ -3,6 +3,8 @@
 		response.sendRedirect("login.jsp");
 	}
 %>
+
+<!-- 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 -->
     
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +27,7 @@
     <main>
         <h1>Log In</h1>
         <div class="container">
-            <form action="login" method="POST" class="login-form">
+            <form action="login" method="POST" class="login-form" autocomplete="off">
                 <label for="username">Username</label>
                 <input name="username" id="username-input" type="text">
                 <label for="password">Password</label>

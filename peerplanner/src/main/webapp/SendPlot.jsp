@@ -3,6 +3,8 @@
 <%@page import="java.sql.Statement" %>
 <%@page import="java.sql.PreparedStatement" %>
 <%@page import="java.sql.ResultSet" %>
+<%@page import="java.util.List" %>
+<%@page import="java.util.ArrayList" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -58,14 +60,37 @@
                             <a class="hidden-link" href="jsp/PeerRequest.jsp">Peer Requests</a>
                         </li>
                         <li>
-                            <a class="hidden-link" href="	index.jsp">Log Out</a>
+                            <a class="hidden-link" href="index.jsp">Log Out</a>
                         </li>
                     </ul>
                 </div>
             </span>
         </nav>
     </header>
-
+	
+	<% 
+		int currentUserID = (int) session.getAttribute("user_id");
+		List<Integer> friendIDs = new ArrayList<>();
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/peerplan", "root", "");
+			Statement st = con.createStatement();
+			String q = "SELECT * FROM friends where from_id='"+currentUserID+"' OR to_id='"+currentUserID+"'";
+	
+			ResultSet rs = st.executeQuery(q);
+			while(rs.next()){
+				friendIDs.add(rs.getInt("from_id"));
+			}
+			request.setAttribute("friendIDs", friendIDs);
+		} catch (Exception e) {
+			
+		}
+	%>
+	
+	<input type="hidden" name="name" value="<%= request.getAttribute("name") %>">
+	
+	
     <div class="main-send-plot">
         <h1>Send Plot Request</h1>
         <div class="form-container">
@@ -73,29 +98,56 @@
 
                 <label for="user">Select Peer</label>
                 <select name="users" id="userlist">
-                    <%
-                    	try {
-                    		Class.forName("com.mysql.jdbc.Driver");
-                    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/peerplan", "root", "");
-                    		Statement st = con.createStatement();
-                    		String q = "SELECT * FROM userlist";
-                    		
-                    		ResultSet rs = st.executeQuery(q);
-                    		while(rs.next()){
-                    			request.setAttribute("request_id", rs.getInt("id"));
-                    			%>
-                    			<option><%= rs.getString("name") %></option>
-                    			<% 
-                    		}
-                    	} catch (Exception e) {
-                    		
-                    	}
+                    <%                    
+                    try {
+                        int currentID = 0;
+                        Object userID = session.getAttribute("user_id");
+                        if (userID instanceof Integer) {
+                            currentID = (int) userID;
+                        } else {
+                            // Handle the case when user_id is not set or not an integer
+                        }
+
+                        int fromID = 0;
+                        Object fromIDAttr = request.getAttribute("fromID");
+                        if (fromIDAttr instanceof Integer) {
+                            fromID = (int) fromIDAttr;
+                        } else {
+                            // Handle the case when from_id is not set or not an integer
+                        }
+
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/peerplan", "root", "");
+                        
+                        String query = "SELECT f.from_id, u.name FROM friends f INNER JOIN userlist u ON f.from_id = u.id WHERE f.from_id=? AND f.to_id=? AND f.status='1'";
+                        PreparedStatement st = con.prepareStatement(query);
+                        
+                        for (int i = 0; i < friendIDs.size(); i++) {
+                            int friendID = friendIDs.get(i);
+                            
+                            if (friendID == currentID) {
+                                continue;
+                            }
+                            
+                            st.setInt(1, friendID);
+                            st.setInt(2, currentID);
+                            
+                            ResultSet rs = st.executeQuery();
+                            while (rs.next()) {
+                            	String friendName = rs.getString("name");
+                                int friendId = rs.getInt("from_id");
+                    
+                                %>
+                                <option value="<%= friendId %>"> <%= friendName %> </option>
+                                <%
+                            }
+                        }
+                    } catch (Exception e) {
+                        // Handle any exceptions that occur during the database connection or query execution
+                    }
                     %>
                 </select>
-				
-				<label for="req_id">Enter user ID</label>
-                <input name="req_id" type="text">
-				
+                
                 <label for="eventname">Event Name</label>
                 <input name="eventname" type="text">
 
@@ -105,13 +157,9 @@
 				<label for="time">Select Time</label>
                 <input type="time" name="time" id="time">
                 
-                <label for="date">Select Date</label>
+                <label for="dates">Select Date</label>
                 <input type="date" name="date" id="date">
-                
-                <div class="checkbox-container">
-                    <label for="everyYear">Every Year</label>
-                    <input type="checkbox" name="everyYear" id="everyYear">
-                </div>
+               
 
                 <span class="send-btn-container">
                     <button id="send-btn" type="submit">Send Plot Request</button>  
@@ -129,6 +177,6 @@
     		swal("Yay", "Plot Request Sent!", "success");
     	}
     </script>
-    <script src="../scripts/script.js"></script>
+    <script src="scripts/script.js"></script>
 </body>
 </html>

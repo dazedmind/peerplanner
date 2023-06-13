@@ -42,8 +42,14 @@
                         <li>
                             <a class="hidden-link" href="/">Account Settings</a>
                         </li>
+       					<li>
+                            <a class="hidden-link" href="Notification.jsp">Notifications</a>
+                        </li>
                         <li>
-                            <a class="hidden-link" href="index.php">Log Out</a>
+                            <a class="hidden-link" href="PeerRequest.jsp">Peer Requests</a>
+                        </li>
+                        <li>
+                            <a class="hidden-link" href="../login.jsp">Log Out</a>
                         </li>
                     </ul>
                 </div>
@@ -56,12 +62,20 @@
         <h1>Account Settings</h1>
 
         <div class="info">
-            <img src="../images/user.png" alt="" style="width: 5rem; height: 5rem;">
-            <form action="/upload" method="POST">
-	            <input type="file" name="user-img" id="user-img">
-	            <input type="submit">
-            </form>
+        	<div class="profile-pic-container">
+	        	<img src="../images/user.png" alt="" style="width: 5rem; height: 5rem;">
+	            <form action="/upload" method="POST">
+					<input type="file" id="actual-btn" hidden/>
+					
+					<!--our custom file upload button-->
+					<label class="choose-btn" for="actual-btn">Choose File</label>
+		            
+		            <input id="img-submit-btn" type="submit" name="submit" value="Upload">
+	            </form>
+        	</div>
+
             
+            <h2>Personal Information:</h2>
             <span class="info-span">
                 <h4>Name: </h4>
                 <p>${sessionScope.name}</p>
@@ -72,12 +86,14 @@
             </span>
             <span class="info-span">
                 <h4>Username: </h4>
-                <p>dzdmnd</p>
+                <p>${sessionScope.username}</p>
             </span>
 
             <div class="acc-options">
-                <a id="change-pass-btn" href="#">Change Password</a>
-                <a id="delete-acc-btn" href="#">Delete Account</a>
+            	<form class="danger-btn-cont" method="post" action="">
+            		<button id="change-pass">Change Password</button>
+            		<button id="danger">Delete Account</button>
+            	</form>
             </div>
         </div>
     </div>

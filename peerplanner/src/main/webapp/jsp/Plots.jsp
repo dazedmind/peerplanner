@@ -3,6 +3,8 @@
 <%@page import="java.sql.Statement" %>
 <%@page import="java.sql.PreparedStatement" %>
 <%@page import="java.sql.ResultSet" %>
+<%@page import="org.json.JSONArray" %>
+<%@page import="org.json.JSONObject" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -64,15 +66,15 @@
             </span>
         </nav>
     </header>
-    
+	
     <div class="main-plot">
+    		<h1 class="card-title">Plots</h1>
     		<div class="plot-card">
-    		    <h1>Plots</h1>
-				<table border="1">	
+				<table style="width:100%;">	
 					<tr>
-						<th>Event Name</th>
-						<th>Message</th>
-						<th>Event Date</th>
+						<th style="width:20%;">Event Name</th>
+	                    <th style="width: 40%;">Description</th>
+	                    <th style="width: 20%;">Date</th>
 						<th>Time</th>						
 						<th>Delete</th>
 					</tr>
@@ -89,15 +91,15 @@
 						while(rs.next()){
 						%>
 						<tr>
-							<td><%=rs.getString("eventname")%></td>
+							<td id="eventname"><%=rs.getString("eventname")%></td>
 							<td><%=rs.getString("message")%></td>
 							<td><%=rs.getString("event_date")%></td>
 							<td><%=rs.getString("time")%></td>
 							<td>
-								<form method="POST" action="">
-									<input type="hidden" name="planid" value="<%= request.getAttribute("eventid") %>">
-								
-									<button id="decline-btn" data-decline="<%=rs.getInt("plan_id") %>">Delete</button>								
+								<form method="POST" action="../removeplot">
+									<input type="hidden" name="planID" value="<%= rs.getInt("plan_id") %>">
+									
+									<button id="decline-btn" data-decline="<%=rs.getInt("plan_id") %>"><i class="fa-solid fa-trash-can"></i></button>								
 								</form>
 							</td>
 						</tr>
@@ -112,6 +114,34 @@
 				</table>
 			</div>
 	</div>
+	
+	  <div class="calendar-container">
+        <div id="calendar"></div>
+    </div>
+    <form action="../calendar" method="post">
+	    <input type="text" name="name" placeholder="Event Name" />
+	    <input type="text" name="date" placeholder="Event Date" />
+	    <input type="text" name="description" placeholder="Event Description" />
+	    <button type="submit">Add Event</button>
+	</form>
+	<div>
+		<%
+		JSONArray calendarEvents = (JSONArray) request.getAttribute("calendarEvents");
+		
+		if (calendarEvents != null) {
+		    for (int i = 0; i < calendarEvents.length(); i++) {
+		        JSONObject event = calendarEvents.getJSONObject(i);
+		        // Process each event
+		    }
+		}
+		%>
+	</div>
+	<script>
+    document.getElementById("decline-btn").addEventListener("click", function() {
+        var planId = this.getAttribute("data-decline");
+        deletePlan(planId);
+    });
+	</script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
     <script src="../scripts/script.js"></script>
     <script src="../scripts/evo-calendar.min.js"></script>

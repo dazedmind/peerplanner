@@ -64,11 +64,12 @@
     </header>
 	
 	<div class="main-plot-request">
+		<h1 class="card-title">Your Plot Request</h1>
         <div class="card">
-            <table style="width: 80%;">
+            <table style="width: 100%;">
             	<thead>
 	                <tr>
-	                    <th>Event Name</th>
+	                    <th style="width:20%;">Event Name</th>
 	                    <th style="width: 40%;">Description</th>
 	                    <th style="width: 20%;">Date</th>
 	                    <th>Time</th>
@@ -100,6 +101,7 @@
 							request.setAttribute("eventid", event_id);
 
 						%>
+					
 						<tr data-row="<%=rs.getInt("plan_id")%>">
 							<td id="eventname"><%=rs.getString("eventname")%></td>
 							<td id="message"><%=rs.getString("message")%></td>
@@ -114,14 +116,14 @@
 									<input type="hidden" name="planid" value="<%= request.getAttribute("eventid") %>">
 									
 									
-									<button id="accept-btn" data-button="<%=rs.getInt("plan_id") %>">Accept</button>
+									<button id="accept-btn" data-button="<%=rs.getInt("plan_id") %>"><i class="fa-solid fa-check"></i></button>
 								</form>          
 							</td>
 							<td>
 								<form method="POST" action="../decline">
 									<input type="hidden" name="planid" value="<%= request.getAttribute("eventid") %>">
 								
-									<button id="decline-btn" data-decline="<%=rs.getInt("plan_id") %>">Decline</button>								
+									<button id="decline-btn" data-decline="<%=rs.getInt("plan_id") %>"><i class="fa-solid fa-xmark"></i></button>								
 								</form>
 							</td>
 						</tr>

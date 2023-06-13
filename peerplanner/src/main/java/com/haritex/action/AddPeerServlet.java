@@ -16,31 +16,46 @@ public class AddPeerServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    // get session attributes
 		HttpSession session = request.getSession();
-	    
-	    int userId = (int) session.getAttribute("user_id");
-	    int friendId = Integer.parseInt(request.getParameter("idvalue"));
-	    
-	        try {
-	            Class.forName("com.mysql.jdbc.Driver");
-	            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/peerplan","root","");
-	            PreparedStatement pstmt = con.prepareStatement("INSERT INTO FRIENDS(from_id, to_id) VALUES(?,?)");
-	            pstmt.setInt(1, userId);
-	            pstmt.setInt(2, friendId);
-				
-				int rowCount = pstmt.executeUpdate();
-				if (rowCount > 0) {
-			        response.sendRedirect("jsp/PeerList.jsp");
+		int userId = (int) session.getAttribute("user_id");
+		int friendId = Integer.parseInt(request.getParameter("idvalue"));
 
-					request.setAttribute("status", "success");
-				} else {
-					request.setAttribute("status", "failed");
-					
-				}
-	            pstmt.close();
-	            con.close();
-	        } catch(ClassNotFoundException | SQLException e) {
-		        throw new ServletException("Plot Request Failed", e);
-	        }
+		try {
+		    Class.forName("com.mysql.jdbc.Driver");
+		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/peerplan", "root", "");
+
+		    String selectQuery = "SELECT * FROM friends WHERE from_id=? AND to_id=?";
+		    PreparedStatement selectStmt = con.prepareStatement(selectQuery);
+		    selectStmt.setInt(1, userId);
+		    selectStmt.setInt(2, friendId);
+		    ResultSet rs = selectStmt.executeQuery();
+
+		    if (rs.next()) {
+		        // Duplicate request already exists
+		        response.sendRedirect("jsp/PeerList.jsp");
+		        request.setAttribute("status", "duplicate");
+		    } else {
+		        String insertQuery = "INSERT INTO friends(from_id, to_id) VALUES(?,?)";
+		        PreparedStatement insertStmt = con.prepareStatement(insertQuery);
+		        insertStmt.setInt(1, userId);
+		        insertStmt.setInt(2, friendId);
+		        int rowCount = insertStmt.executeUpdate();
+
+		        if (rowCount > 0) {
+		            // Request successfully inserted
+		            response.sendRedirect("jsp/PeerList.jsp");
+		            request.setAttribute("status", "success");
+		        } else {
+		            // Failed to insert request
+		            request.setAttribute("status", "failed");
+		        }
+		    }
+
+		    rs.close();
+		    selectStmt.close();
+		    con.close();
+		} catch (ClassNotFoundException | SQLException e) {
+		    throw new ServletException("Plot Request Failed", e);
+		}
 	}
 
 }

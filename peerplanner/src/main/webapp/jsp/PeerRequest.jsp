@@ -67,7 +67,7 @@
         <h1 class="page-heading">Peer Requests</h1>
 
         <div class="peer-req-card">
-            <table class="pr-table" border="1">
+            <table class="pr-table">
                 <tr>
                     <th width="60%">From</td>
                     <th width="20%">Time</td>
@@ -98,14 +98,14 @@
                         <form method="POST" action="../acceptpeer">
                             <input type="hidden" name="fromid" value="<%= request.getAttribute("fromID") %>">
                         
-                            <button id="accept-btn">Accept</button>								
+                            <button id="accept-btn"><i class="fa-solid fa-check"></i></button>								
                         </form>
                     </td>
                     <td>
                         <form method="POST" action="">
                             <input type="hidden" name="planid">
                         
-                            <button id="decline-btn">Decline</button>								
+                            <button id="decline-btn"><i class="fa-solid fa-xmark"></i></button>								
                         </form>
                     </td>
                 </tr>

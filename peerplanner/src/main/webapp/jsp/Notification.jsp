@@ -61,7 +61,7 @@
         <h1 class="page-heading">Notifications</h1>
 
         <div class="peer-req-card">
-            <table class="pr-table" border="1">
+            <table class="pr-table">
                 <tr>
                 	<th>Time</th>
                     <th width="60%">Notification</td>
@@ -74,7 +74,7 @@
                         <form method="POST" action="">
                             <input type="hidden" name="planid">
                         
-                            <button id="decline-btn">Delete</button>								
+                            <button id="decline-btn"><i class="fa-solid fa-trash-can"></i></button>								
                         </form>
                     </td>
                 </tr>

@@ -22,11 +22,14 @@ public class SavePlotServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int requestId = Integer.parseInt(request.getParameter("req_id"));
+		String userlistParam = request.getParameter("users");
+		int requestId = Integer.parseInt(userlistParam);
 		String ename = request.getParameter("eventname");
 		String emessage = request.getParameter("description");
 		String edate = request.getParameter("date");
 		String etime = request.getParameter("time");
+		
+		System.out.println(requestId);
 		
 		RequestDispatcher dispatcher = null;
 		Connection con = null;
